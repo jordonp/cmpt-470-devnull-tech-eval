@@ -1,0 +1,117 @@
+<style type="text/css">
+	#main {
+		width:900px;
+	}
+	canvas {
+		border: 1px solid black;
+	}
+	#controls {
+		width:300px;
+		float:right;
+	}
+</style>
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/ui-lightness/jquery-ui.css" type="text/css" media="all" />
+	<div id="main">
+		<canvas id="canvas" width="512" height="512"></canvas>
+		<div id="controls">
+			<h2>Rotate</h2>
+			<div id="rotate-slider"></div>
+		    <div id="rotate-slider-result">0 rad</div>
+		    <h2>Scale</h2>
+			<div id="scale-slider"></div>
+		    <div id="scale-slider-result">1.0</div>
+		    <h2>Blur</h2>
+			<div id="blur-slider"></div>
+		    <div id="blur-slider-result">0</div>
+		    <h2>Emboss</h2>
+			<div id="emboss-slider"></div>
+		    <div id="emboss-slider-result">0</div>
+		    <h2>Edge Detect</h2>
+			<div id="edge-slider"></div>
+		    <div id="edge-slider-result">0</div>
+		</div>
+		<div id="image-select">
+			<select id="image-picker">
+				<option value="batman.png">Batman</option>
+				<option value="wolf.jpg">Wolf</option>
+			</select>
+			<label for="image-picker">Image Select</label>
+		</div>
+	</div>
+
+	<!-- Scripts go here -->
+	<!-- Shaders -->
+	<script id="vertex-shader" type="x-shader/x-vertex">
+		attribute vec2 a_position;
+		attribute vec2 a_texCoord;
+
+		uniform vec2 u_resolution;
+		uniform float u_flipY;
+		uniform float u_angle;
+		uniform float u_scale;
+
+		varying vec2 v_texCoord;
+
+		void main() {
+			vec2 zeroToOne = a_position / u_resolution;
+			vec2 zeroToTwo = zeroToOne * 2.0;
+			vec2 clipSpace = zeroToTwo - 1.0;
+
+			mat3 scale = mat3(1.0 * u_scale);
+
+			mat3 rotZ = mat3(cos(u_angle), -sin(u_angle), 0.0, sin(u_angle), cos(u_angle), 0.0, 0.0, 0.0 ,1.0);
+
+			if(u_flipY > 0.0)
+				gl_Position = vec4(vec3(clipSpace * vec2(1, u_flipY), 0), 1);
+			else
+				gl_Position = vec4(rotZ * scale * vec3(clipSpace * vec2(1, u_flipY), 0), 1);
+
+			v_texCoord = a_texCoord;
+		}
+	</script>
+	<script id="fragment-shader" type="x-shader/x-fragment">
+		precision mediump float;
+
+		uniform sampler2D u_image;
+		uniform vec2 u_textureSize;
+		uniform float u_kernel[9];
+
+		varying vec2 v_texCoord;
+		
+		void main() {
+			vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
+
+			vec4 colorSum =
+				texture2D(u_image, v_texCoord + onePixel * vec2(-1, -1)) * u_kernel[0] +
+				texture2D(u_image, v_texCoord + onePixel * vec2( 0, -1)) * u_kernel[1] +
+				texture2D(u_image, v_texCoord + onePixel * vec2( 1, -1)) * u_kernel[2] +
+				texture2D(u_image, v_texCoord + onePixel * vec2(-1,  0)) * u_kernel[3] +
+				texture2D(u_image, v_texCoord + onePixel * vec2( 0,  0)) * u_kernel[4] +
+				texture2D(u_image, v_texCoord + onePixel * vec2( 1,  0)) * u_kernel[5] +
+				texture2D(u_image, v_texCoord + onePixel * vec2(-1,  1)) * u_kernel[6] +
+				texture2D(u_image, v_texCoord + onePixel * vec2( 0,  1)) * u_kernel[7] +
+				texture2D(u_image, v_texCoord + onePixel * vec2( 1,  1)) * u_kernel[8];
+
+			float kernelWeight =
+				u_kernel[0] +
+				u_kernel[1] +
+				u_kernel[2] +
+				u_kernel[3] +
+				u_kernel[4] +
+				u_kernel[5] +
+				u_kernel[6] +
+				u_kernel[7] +
+				u_kernel[8];
+
+			if (kernelWeight <= 0.0) {
+				kernelWeight = 1.0;
+			}
+
+			gl_FragColor = vec4((colorSum/kernelWeight).rgb, 1.0);
+		}
+	</script>
+	<!-- JavaScript -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+	<script src="webgl-util.js"></script>
+	<script src="webgl-image.js"></script>
