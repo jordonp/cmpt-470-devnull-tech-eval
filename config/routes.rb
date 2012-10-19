@@ -1,11 +1,6 @@
 App::Application.routes.draw do
 
-  get "demo/demo_1"
-
-  get "demo/demo_2"
-
-  get "demo/demo_3"
-
+  resources :demo
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
