@@ -4,12 +4,12 @@ class DemoController < ApplicationController
     respond_to do |format|
       format.html {
         case @demo
-        when 1
+        when "1"
             render :action => "demo_1"
-        when 2
-            render :action => "demo_1"
-        when 3
-            render :action => "demo_1"
+        when "2"
+            render :action => "demo_2"
+        when "3"
+            render :action => "demo_3"
         else
             render :action => "demo_1"
         end
