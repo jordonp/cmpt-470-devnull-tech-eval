@@ -1,3 +1,6 @@
+<%= javascript_include_tag("demo/webgl-image") %>
+<%= javascript_include_tag("demo/webgl-util") %>
+
 <style type="text/css">
 	#main {
 		width:900px;
@@ -32,8 +35,8 @@
 		</div>
 		<div id="image-select">
 			<select id="image-picker">
-				<option value="batman.png">Batman</option>
-				<option value="wolf.jpg">Wolf</option>
+				<option value="<%= asset_path 'batman.png' %>">Batman</option>
+				<option value="<%= asset_path 'wolf.jpg' %>">Wolf</option>
 			</select>
 			<label for="image-picker">Image Select</label>
 		</div>
