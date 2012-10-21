@@ -1,6 +1,12 @@
 App::Application.routes.draw do
 
-  resources :demo
+  resources :tech_eval_demo, :only => [:index]
+
+  resources :about, :only => [:index]
+
+  resources :tech_eval, :only => [:index]
+
+  resources :demo, :only => [:show, :index]
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
