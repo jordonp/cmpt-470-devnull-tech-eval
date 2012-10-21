@@ -1,11 +1,4 @@
 var tdl;
-tdl.require('tdl.fast');
-tdl.require('tdl.math');
-tdl.require('tdl.models');
-tdl.require('tdl.primitives');
-tdl.require('tdl.programs');
-tdl.require('tdl.textures');
-tdl.require('tdl.webgl');
 
 function Scene () {
   this.objects = [];
