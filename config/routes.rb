@@ -1,5 +1,7 @@
 App::Application.routes.draw do
 
+  resources :tech_eval_demo, :only => [:index]
+
   resources :about, :only => [:index]
 
   resources :tech_eval, :only => [:index]
