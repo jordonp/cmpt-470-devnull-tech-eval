@@ -59,6 +59,9 @@ function createProgramFromTags(vertexTagId, fragmentTagId) {
 
 function initRenderer() {
   canvas = document.getElementById("canvas");
+  canvas.width = $("body").width();
+  canvas.height = window.innerHeight - $(".navbar").height();
+
   gl = tdl.webgl.setupWebGL(canvas);
   if (!gl) {
     return;  // Do nothing
@@ -77,6 +80,11 @@ function initRenderer() {
       eye,
       [0.0, 0.0, -4.0],
       [0.0, 1.0, 0.0]);
+  gl.depthMask(true);
+  gl.clearColor(0.0,0.0,0.0,1);
+  gl.clearDepth(1);
+  gl.enable(gl.CULL_FACE);
+  gl.enable(gl.DEPTH_TEST);
 }
 
 function setScene(scene) {
@@ -84,11 +92,8 @@ function setScene(scene) {
 }
 
 function render() {
-  tdl.fast.matrix4.lookAt(
-      view,
-      eye,
-      [0.0, 0.0, -4.0],
-      [0.0, 1.0, 0.0]);
+  
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
   sceneToRender.draw();
   tdl.webgl.requestAnimationFrame(render, canvas);
 }

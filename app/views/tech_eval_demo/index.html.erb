@@ -12,11 +12,11 @@
 <%= javascript_include_tag("tdl/primitives") %>
 <%= javascript_include_tag("renderer") %>
 <%= javascript_include_tag("test") %>
-
-<div id="main">
-<canvas id="canvas" width="800" height="600"></canvas>
 </div>
+</div>
+<canvas id="canvas"></canvas>
 
+<div class="container">
 <!-- Scripts go here -->
 <!-- Shaders -->
 <script id="vertex-shader" type="x-shader/x-vertex">
@@ -31,7 +31,7 @@
 
 	void main() {
 		gl_Position = projection * view * transform * vec4(position, 1);
-		v_color = color;
+		v_color = normal;
 	}
 </script>
 <script id="fragment-shader" type="x-shader/x-fragment">
