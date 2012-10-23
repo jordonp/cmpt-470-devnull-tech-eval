@@ -1,13 +1,13 @@
 <h1>Comparison Evaluation of WebGL</h1>
 <p>
-WebGL is a relatively new technology that has risen alongside the new specification for HTML5 and CSS3. This new cross-platform low-level 3D graphics API is a royalty free standard for based on OpenGL ES 2.0. Exposing HTML5's Canvas element, WebGL provides  3D to the web with no additional plugins. Even though this standard is heavily backed by major browser vendors (such as Apple, Google, Mozilla and Firefox), it faces challenges to alternative web 3D technologies. The following document will compare and contrast WebGL with Silverlight, Stage 3D and Unity 3D. 
+WebGL is a relatively new technology that has risen alongside the new specification for HTML5 and CSS3. This new cross-platform low-level 3D graphics API is a royalty free standard based on OpenGL ES 2.0. Exposing HTML5's Canvas element, WebGL provides  3D to the web with no additional plugins. Even though this standard is heavily backed by major browser vendors (such as Apple, Google, Mozilla and Firefox), it faces challenges to alternative web 3D technologies. The following document will compare and contrast WebGL with Silverlight, Stage 3D and Unity 3D. 
 </p>
 <h2>Microsoft Silverlight</h2>
 <p>
 Microsoft Silverlight is a plug-in that allows users to view rich media, such as streaming video and interactive applications, in their browser. It is fully supported on the latest versions of Internet Explorer, Firefox, Chrome and Safari, and runs in Windows and Mac OS. Silverlight applications are developed using .NET languages and Extensible Application Markup Language (XAML) for the user interface. 
 </p>
 <p>
-Unlike WebGL, Silverlight is not considered the web standard for 3D technologies. However, it boasts advanced multimedia streaming capabilities that are better than what’s available in HTML 5 and is <%= link_to "already installed in a majority of web-enabled devices", "http://alexzambelli.com/blog/2012/02/09/silverlight-and-its-role-in-the-future-of-microsoft-media/", :target => "_blank" %>. Silverlight is not expected to expand support to other platforms in the future (ie. Linux) but will be the primary development platform for mobile devices using Windows Phone OS. WebGL is already partially supported by mobile Opera browsers and will see additional support by Firefox for Android and Blackberry browsers in the near future, as they bring 3D web content to mobile devices. 
+Unlike WebGL, Silverlight is not considered the web standard for 3D technologies. However, it boasts advanced multimedia streaming capabilities that are better than what is available in HTML 5 and is <%= link_to "already installed in a majority of web-enabled devices", "http://alexzambelli.com/blog/2012/02/09/silverlight-and-its-role-in-the-future-of-microsoft-media/", :target => "_blank" %>. Silverlight is not expected to expand support to other platforms in the future (ie. Linux) but will be the primary development platform for mobile devices using Windows Phone OS. WebGL is already partially supported by mobile Opera browsers and will see additional support by Firefox for Android and Blackberry browsers in the near future, as they bring 3D web content to mobile devices. 
 <p>
 <p>
 Silverlight and WebGL encounter similar security issues as they both expose low-level functionalities in the operating system. Microsoft refuses to provide support for WebGL in Internet Explorer, claiming that it "<%= link_to "relies too heavily on third parties", "http://blogs.technet.com/b/srd/archive/2011/06/16/webgl-considered-harmful.aspx", :target => "_blank" %>" for security, and provides a high threat of DoS attacks. However, <%= link_to "it has been shown", "http://connect.microsoft.com/VisualStudio/feedback/details/676134/dos-vulnerability-in-silverlight-5s-3d-similar-to-webgl-dos-vulnerability", :target => "_blank" %> that the same flaw exists in Silverlight, where malicious shader code could jeopardize system security. Microsoft’s solution is to blacklist all display drivers, effectively disabling Silverlight by default. Unfortunately, the average user will likely have difficulty <%= link_to "re-enabling the blocked drivers", "http://www.sharpgis.net/post/2011/12/10/Why-Silverlight-5s-3D-is-(almost)-useless.aspx", :target => "_blank" %>. Mozilla, as one of the key developers of WebGL, maintains a list of whitelisted drivers while the Khronos Group works with GPU vendors to produce more robust hardware. 
@@ -17,10 +17,10 @@ Silverlight and WebGL encounter similar security issues as they both expose low-
 Stage 3D is a 3D graphics ActionScript API for Adobe’s Flash and Air platforms.  It allows for hardware accelerated 3D graphics on the web through Adobe’s Flash Player 11 and is a direct competitor to WebGL. 
 </p>
 <p>
-One of the main advantages of Stage 3D over WebGL is compatibility.  Although it requires an external plugin for your browser, that plugin is the latest version of Flash Player, which most users already have.  Since it uses Flash Player, it should work about the same in any browser that supports Flash Player, including Internet Explorer.  Stage 3D does require more modern graphics hardware (GPU from 2009 or later with Pixel Shader 2.0 support), but it includes a software renderer to fallback to incase your browser/OS/GPU combination is not supported. Stage 3D is also a simpler API than WebGL so it could be easier to learn.
+One of the main advantages of Stage 3D over WebGL is compatibility.  Although it requires an external plugin for your browser, that plugin is the latest version of Flash Player, which most users already have.  Since it uses Flash Player, it should work about the same in any browser that supports Flash Player, including Internet Explorer.  Stage 3D does require more modern graphics hardware (GPU from 2009 or later with Pixel Shader 2.0 support), but it includes a software renderer to fallback to in case your browser/OS/GPU combination is not supported. Stage 3D is also a simpler API than WebGL so it could be easier to learn.
 </p>
 <p>
-Although Stage 3D is a simpler API, since it is a whole new API, it will require anyone already familiar to OpenGL to have to re-learn how stage 3D works, whereas if they used WebGL, it should already be familiar, also there are many high level libraries for WebGL that can make it just as easy to use as Stage 3D.  Another disadvantage of Stage 3D is that it’s shader language, AGAL, is not nearly as powerful as GLSL.  AGAL is very limited in what it can do and is coded in a style similar to Assembly code, whereas GLSL is very similar to C and includes many powerful features such as structs and conditional statements that AGAL does not have.
+Although Stage 3D is a simpler API, since it is a whole new API, it will require anyone already familiar to OpenGL to have to re-learn how stage 3D works, whereas if they used WebGL, it should already be familiar. Also there are many high level libraries for WebGL that can make it just as easy to use as Stage 3D.  Another disadvantage of Stage 3D is that it’s shader language, AGAL, is not nearly as powerful as GLSL.  AGAL is very limited in what it can do and is coded in a style similar to Assembly code, whereas GLSL is very similar to C and includes many powerful features such as structs and conditional statements that AGAL does not have.
 </p>
 <p>
 The software renderer fallback may seem like a huge drawback of WebGL compared to Stage 3D, but in actual use, this is less of an issue as the performance of the software renderer is quite terrible to the point of being almost unusable even on high end hardware. Stage 3D also lacks DOM interaction since it is flash based, which can really limit its use.
@@ -28,7 +28,7 @@ The software renderer fallback may seem like a huge drawback of WebGL compared t
 <p>
 Overall Stage 3D would be a good alternative to WebGL if you are making a self contained 3D application like a game, but anything that would need to interact with the rest of your website/web app would be better suited to WebGL.
 </p>
-<h2>Adobe Stage 3D</h2>
+<h2>Unity 3D</h2>
 <p>
 Unity 3D is a cross-platform game engine that targets web applications, desktop and mobile devices. Like WebGL, Unity 3D allows for direct rendering by the graphical processing unit (GPU) and is supported by major browser vendors. However, the downfall is that this technology does have restrictions and limitations from immediate accessibility to cost. The following will compare and contrast Unity 3D to the competing technology, WebGL.
 </p>
@@ -51,7 +51,7 @@ The disadvantages of Unity 3D is the following:
 </ul>
 <h4>Contrast with WebGL</h4>
 <p>
-Comparing Unity 3D to WebGL, is actually a hard stretch because one is an primarily an API and the other is an IDE.
+Comparing Unity 3D to WebGL is actually a hard stretch because one is an primarily an API and the other is an IDE.
 </p>
 The following section will highlight the positive aspects of WebGL in contrast to Unity 3D:
 <ul>
