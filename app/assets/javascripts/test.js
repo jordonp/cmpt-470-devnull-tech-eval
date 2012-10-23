@@ -35,10 +35,10 @@ $(function() {
   
   var collision_detect = function(obj1, obj2) {
 	
-	distx1 = Math.abs(obj1.x) + obj1.width/2;
-	disty1 = Math.abs(obj1.y) + obj1.height/2;
-	distx2 = Math.abs(obj2.x) + obj2.width/2;
-	disty2 = Math.abs(obj2.y) + obj2.height/2;
+	distx1 = Math.abs(obj1.x) + obj1.boundWidth/2;
+	disty1 = Math.abs(obj1.y) + obj1.boundHeight/2;
+	distx2 = Math.abs(obj2.x) + obj2.boundWidth/2;
+	disty2 = Math.abs(obj2.y) + obj2.boundHeight/2;
 
 	a = Math.abs(obj1.x) + Math.abs(obj2.x);
 	b = Math.abs(obj1.y) + Math.abs(obj2.y);
@@ -48,14 +48,14 @@ $(function() {
 	if (hypo <= (distx1 + distx2)/2){
 		console.log(distx1, disty1, distx2, disty2);
 		console.log(distx1-distx2, disty1-disty2, hypo);
-		console.log("Collision1.");
+		console.log("Horizontal collision.");
 		return true;
 	}	
 
 	if (hypo <= (disty1 + disty2)/2){
 		console.log(distx1, disty1, distx2, disty2);
 		console.log(distx1-distx2, disty1-disty2, hypo);
-		console.log("Collision2.");
+		console.log("Vertical collision.");
 		return true;
 	}	
 
@@ -75,6 +75,7 @@ $(function() {
   var testObject2 = new GameObject();
   testObject2.z = -4.0;
   testObject2.width = 2.0;
+  testObject2.boundWidth = 3.0;
   testObject2.color = [1.0, 1.0, 0.6];
   testObject2.setTexture("assets/crate.jpg");
 
