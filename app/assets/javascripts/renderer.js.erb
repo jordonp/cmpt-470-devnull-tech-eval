@@ -13,7 +13,7 @@ Scene.prototype.draw = function() {
 function GameObject () {
   var cube = tdl.primitives.createCube(1.0);
   var textures = {
-    diffuseSampler: tdl.textures.loadTexture("<%= asset_path('crate.jpg') %>")};
+    diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
   var model = new tdl.models.Model(program, cube, textures);
   this.model = model;
   this.x = 0.0;
@@ -26,10 +26,16 @@ function GameObject () {
   this.rotateY = 0.0;
   this.rotateZ = 0.0;
   this.transform = new Float32Array(16);
-  this.color = [0.0, 0.0, 1.0];
+  this.color = [1.0, 1.0, 1.0];
 
 }
 
+GameObject.prototype.setTexture = function(image_path) {
+  var textures = {
+    diffuseSampler: tdl.textures.loadTexture(image_path)};
+    this.model.textures = textures;
+};
+  
 GameObject.prototype.draw = function() {
   tdl.fast.identity4(this.transform);
   tdl.fast.matrix4.rotateX(this.transform, this.rotateX);
