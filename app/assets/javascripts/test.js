@@ -1,18 +1,36 @@
 var testScene;
 var playerObject;
 var obstacle;
+var jumping  = false;
 
 function gameLoop() {
 	//game logic here
-	obstacle.x--;
+	obstacle.x-= 0.5;
 	if(obstacle.x == -20)
 	{
 		obstacle.x = 300;
 	}
+
+	if(playerObject.y > 0 && !jumping) {
+		playerObject.y-= 0.5;
+	}
+
+	if(playerObject.y < 0 + playerObject.boundHeight/2) {
+		playerObject.y = 0 + playerObject.boundHeight/2;
+	}
+
+	if(jumping)
+	{
+		if(playerObject.y < 3.0) {
+			playerObject.y += 0.5/playerObject.y/3;
+		} else {
+			jumping = false;
+		}
+	}
 }
 
 $(function() {
-
+  
   $(document).keydown(function(e){
       if (e.keyCode == 37) { //left
          playerObject.x -= 0.1;
@@ -40,6 +58,12 @@ $(function() {
 		 if (collision_detect(playerObject, testObject2)){
 			playerObject.y += 0.1;
 			}
+         return false;
+      }
+      if (e.keyCode == 32) { //space
+      	if(!jumping && playerObject.y == 0 + playerObject.boundHeight/2) {
+          jumping = true;
+     	}
          return false;
       }
   });
@@ -80,7 +104,9 @@ $(function() {
   var testObject = new GameObject();
   testObject.z = -4.0;
   testObject.x = -2.5;
+  testObject.y = 2.0;
   testObject.rotateY = 90;
+  testObject.boundHeight = 1.3;
   testObject.loadModelFromJson();
   testObject.setTexture("assets/char.jpg");
 
@@ -110,7 +136,7 @@ $(function() {
 
   setScene(testScene);
 
-  setInterval(gameLoop, 1000 / 30);
+  setInterval(gameLoop, 1000 / 60);
   render();
 
   return true;
