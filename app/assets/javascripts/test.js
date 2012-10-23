@@ -69,8 +69,8 @@ $(function() {
   var testObject = new GameObject();
   testObject.z = -4.0;
   testObject.x = -2.5;
-  testObject.height = 2.0;
-  testObject.color = [0.0, 0.2, 0.2];
+  testObject.loadModelFromJson();
+  testObject.setTexture("assets/char.jpg");
 
   var testObject2 = new GameObject();
   testObject2.z = -4.0;
