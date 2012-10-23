@@ -121,15 +121,35 @@ $(function() {
   testObject3.z = -4.0;
   testObject3.y = -1.0;
   testObject3.width = 500.0;
-  testObject3.depth = 5.0;
+  testObject3.depth = 2.0;
   testObject3.boundWidth = 500.0;
-  testObject3.boundDepth = 5.0;
-  testObject3.color = [0.5, 0.5, 0.5];
+  testObject3.boundDepth = 2.0;
+  testObject3.color = [0.8, 0.5, 0.5];
+
+  var testObject4 = new GameObject();
+  testObject4.z = -6.0;
+  testObject4.y = -1.0;
+  testObject4.width = 500.0;
+  testObject4.depth = 2.0;
+  testObject4.boundWidth = 500.0;
+  testObject4.boundDepth = 2.0;
+  testObject4.color = [0.5, 0.8, 0.5];
+
+  var testObject5 = new GameObject();
+  testObject5.z = -2.0;
+  testObject5.y = -1.0;
+  testObject5.width = 500.0;
+  testObject5.depth = 2.0;
+  testObject5.boundWidth = 500.0;
+  testObject5.boundDepth = 2.0;
+  testObject5.color = [0.5, 0.5, 0.8];
 
   testScene = new Scene();
   testScene.objects.push(testObject);
   testScene.objects.push(testObject2);
   testScene.objects.push(testObject3);
+  testScene.objects.push(testObject4);
+  testScene.objects.push(testObject5);
   
   playerObject = testScene.objects[0];
   obstacle = testScene.objects[1];
