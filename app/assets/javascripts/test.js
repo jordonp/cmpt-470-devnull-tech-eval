@@ -1,5 +1,16 @@
 var testScene;
 var playerObject;
+var obstacle;
+
+function gameLoop() {
+	//game logic here
+	obstacle.x--;
+	if(obstacle.x == -20)
+	{
+		obstacle.x = 300;
+	}
+}
+
 $(function() {
 
   $(document).keydown(function(e){
@@ -69,6 +80,7 @@ $(function() {
   var testObject = new GameObject();
   testObject.z = -4.0;
   testObject.x = -2.5;
+  testObject.rotateY = 90;
   testObject.loadModelFromJson();
   testObject.setTexture("assets/char.jpg");
 
@@ -79,15 +91,28 @@ $(function() {
   testObject2.color = [1.0, 1.0, 0.6];
   testObject2.setTexture("assets/crate.jpg");
 
+  var testObject3 = new GameObject();
+  testObject3.z = -4.0;
+  testObject3.y = -1.0;
+  testObject3.width = 500.0;
+  testObject3.depth = 5.0;
+  testObject3.boundWidth = 500.0;
+  testObject3.boundDepth = 5.0;
+  testObject3.color = [0.5, 0.5, 0.5];
+
   testScene = new Scene();
   testScene.objects.push(testObject);
   testScene.objects.push(testObject2);
+  testScene.objects.push(testObject3);
   
   playerObject = testScene.objects[0];
+  obstacle = testScene.objects[1];
 
   setScene(testScene);
 
+  setInterval(gameLoop, 1000 / 30);
   render();
+
   return true;
 
 });

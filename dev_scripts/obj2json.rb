@@ -7,7 +7,7 @@ vertices = [];
 normals = [];
 texCoords = [];
 faces = [];
-model =  {"indices" => [], "normal" => [], "position" => [], "texCoord" => []}
+missingTexCoords = false;
 
 File.open(filename) do |f|
   f.each_line do |line|
@@ -33,6 +33,7 @@ File.open(filename) do |f|
     when 'f '
       face = []
       line[1..line.length-1].split.each do |faceValue|
+        missingTexCoords = faceValue.include? '//'
         faceTri = []
         faceValue.split('/').each do |value|
           faceTri << (value.to_i - 1)
@@ -44,24 +45,54 @@ File.open(filename) do |f|
   end
 end
 
+model =  {"indices" => [], "normal" => [], "position" => []}
+
+if !missingTexCoords
+  model["texCoord"] = []
+end
+
 faceCounter = 0;
 
 faces.each do |face|
-  face.each do |faceTri|
-    vertices[faceTri[0]].each do |vertexCoord|
-      model["position"] << vertexCoord
-    end
+  face.each_with_index do |faceTri, i|
+    if i > 2
+      face[0..i].each_with_index do |newFaceTri, j|
+        next if j == ((i+1)%3)
+        vertices[newFaceTri[0]].each do |vertexCoord|
+          model["position"] << vertexCoord
+        end
 
-    texCoords[faceTri[1]].each do |texCoord|
-      model["texCoord"] << texCoord
-    end
+        if !missingTexCoords
+          texCoords[newFaceTri[1]][0..1].each do |texCoord|
+            model["texCoord"] << texCoord
+          end
+        end
 
-    normals[faceTri[2]].each do |normalCoord|
-      model["normal"] << normalCoord
-    end
+        normals[newFaceTri[2]].each do |normalCoord|
+          model["normal"] << normalCoord
+        end
 
-    model["indices"] << faceCounter
-    faceCounter = faceCounter + 1
+        model["indices"] << faceCounter
+        faceCounter = faceCounter + 1
+      end
+    else
+      vertices[faceTri[0]].each do |vertexCoord|
+        model["position"] << vertexCoord
+      end
+
+      if !missingTexCoords
+        texCoords[faceTri[1]][0..1].each do |texCoord|
+          model["texCoord"] << texCoord
+        end
+      end
+
+      normals[faceTri[2]].each do |normalCoord|
+        model["normal"] << normalCoord
+      end
+
+      model["indices"] << faceCounter
+      faceCounter = faceCounter + 1
+    end
   end
 end
 
