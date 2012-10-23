@@ -12,7 +12,9 @@ Scene.prototype.draw = function() {
 
 function GameObject () {
   var cube = tdl.primitives.createCube(1.0);
-  var model = new tdl.models.Model(program, cube, {});
+  var textures = {
+    diffuseSampler: tdl.textures.loadTexture("<%= asset_path('crate.jpg') %>")};
+  var model = new tdl.models.Model(program, cube, textures);
   this.model = model;
   this.x = 0.0;
   this.y = 0.0;

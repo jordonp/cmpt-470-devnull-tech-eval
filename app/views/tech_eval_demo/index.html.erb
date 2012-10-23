@@ -22,6 +22,7 @@
 <script id="vertex-shader" type="x-shader/x-vertex">
 	attribute vec3 position;
 	attribute vec3 normal;
+	attribute vec2 texCoord;
 
 	uniform mat4 transform;
 	uniform mat4 view;
@@ -31,9 +32,11 @@
 
 	varying vec3 v_normal;
 	varying vec3 v_position;
+	varying vec2 v_texCoord;
 	varying vec3 v_color;
 
 	void main() {
+		v_texCoord = texCoord;
 		v_normal = normalize(mat3(transformInv) * normal);
     	v_position = vec3(transform * vec4(position, 1.0));
     	v_color = color;
@@ -44,8 +47,11 @@
 <script id="fragment-shader" type="x-shader/x-fragment">
 	precision mediump float;
 
+	uniform sampler2D diffuseSampler;
+
 	varying vec3 v_normal;
 	varying vec3 v_position;
+	varying vec2 v_texCoord;
 	varying vec3 v_color;
 	
 	struct lightSource
@@ -63,9 +69,9 @@
 	{
 	    vec4 diffuse;
 	};
-	material mymaterial = material(vec4(v_color, 1.0));
 
 	void main(void) {
+		material mymaterial = material(texture2D(diffuseSampler, v_texCoord));
 	    vec3 normalDirection = normalize(v_normal);
 	    vec3 lightDirection = normalize(vec3(light0.position));
 	    vec3 diffuseReflection
