@@ -29,6 +29,7 @@ function GameObject () {
   this.rotateZ = 0.0;
   this.transform = new Float32Array(16);
   this.color = [1.0, 1.0, 1.0];
+  this.renderBounds = false;
 
 }
 
@@ -68,6 +69,21 @@ GameObject.prototype.draw = function() {
   tdl.fast.inverse4(transformInv, this.transform)
   this.model.drawPrep();
   this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "view": view, "projection": projection});
+
+  if(this.renderBounds) {
+    var cube = tdl.primitives.createCube(1.0);
+    var textures = {diffuseSampler: tdl.textures.loadTexture([255, 0, 0, 1.0])};
+    var boundingBox = new tdl.models.Model(program, cube, textures);
+    var boxTransform = new Float32Array(16);
+    tdl.fast.identity4(boxTransform);
+    tdl.fast.matrix4.scale(boxTransform, [this.boundWidth, this.boundHeight, this.boundDepth]);
+    tdl.fast.matrix4.setTranslation(boxTransform, [this.x, this.y, this.z]);
+    var boxTransformInv = new Float32Array(16);
+    tdl.fast.inverse4(boxTransformInv, boxTransform)
+    boundingBox.drawPrep();
+    boundingBox.draw({"transform": boxTransform, "transformInv": boxTransformInv, "color": this.color, "view": view, "projection": projection});
+  }
+
 };
 
 
