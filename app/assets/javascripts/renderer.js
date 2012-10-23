@@ -35,8 +35,10 @@ GameObject.prototype.draw = function() {
   tdl.fast.matrix4.rotateZ(this.transform, this.rotateZ);
   tdl.fast.matrix4.scale(this.transform, [this.width, this.height, this.depth]);
   tdl.fast.matrix4.setTranslation(this.transform, [this.x, this.y, this.z]);
+  var transformInv = new Float32Array(16);
+  tdl.fast.inverse4(transformInv, this.transform)
   this.model.drawPrep();
-  this.model.draw({"transform": this.transform, "color": this.color, "view": view, "projection": projection});
+  this.model.draw({"transform": this.transform, "transformInv": transformInv, "color": this.color, "view": view, "projection": projection});
 };
 
 
@@ -81,7 +83,7 @@ function initRenderer() {
       [0.0, 0.0, -4.0],
       [0.0, 1.0, 0.0]);
   gl.depthMask(true);
-  gl.clearColor(0.0,0.0,0.0,1);
+  gl.clearColor(0.1,0.1,0.1,1);
   gl.clearDepth(1);
   gl.enable(gl.CULL_FACE);
   gl.enable(gl.DEPTH_TEST);
@@ -93,7 +95,7 @@ function setScene(scene) {
 
 function render() {
   
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   sceneToRender.draw();
   tdl.webgl.requestAnimationFrame(render, canvas);
 }

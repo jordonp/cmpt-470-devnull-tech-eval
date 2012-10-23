@@ -26,20 +26,53 @@
 	uniform mat4 transform;
 	uniform mat4 view;
 	uniform mat4 projection;
+	uniform mat4 transformInv;
 	uniform vec3 color;
+
+	varying vec3 v_normal;
+	varying vec3 v_position;
 	varying vec3 v_color;
 
 	void main() {
+		v_normal = normalize(mat3(transformInv) * normal);
+    	v_position = vec3(transform * vec4(position, 1.0));
+    	v_color = color;
+
 		gl_Position = projection * view * transform * vec4(position, 1);
-		v_color = normal;
 	}
 </script>
 <script id="fragment-shader" type="x-shader/x-fragment">
 	precision mediump float;
 
+	varying vec3 v_normal;
+	varying vec3 v_position;
 	varying vec3 v_color;
 	
-	void main() {
-		gl_FragColor = vec4(v_color, 1.0);
+	struct lightSource
+	{
+	    vec4 position;
+	    vec4 diffuse;
+	};
+
+	lightSource light0 = lightSource(
+	         vec4(4.0, 2.0, 4.0, 0.0),
+	         vec4(1.0, 1.0, 1.0, 1.0)
+	         );
+
+	struct material
+	{
+	    vec4 diffuse;
+	};
+	material mymaterial = material(vec4(v_color, 1.0));
+
+	void main(void) {
+	    vec3 normalDirection = normalize(v_normal);
+	    vec3 lightDirection = normalize(vec3(light0.position));
+	    vec3 diffuseReflection
+	    = vec3(light0.diffuse) * vec3(mymaterial.diffuse)
+	    * max(0.0, dot(normalDirection, lightDirection));
+	    
+	    gl_FragColor = vec4(diffuseReflection, 1.0);
+	    
 	}
 </script>
