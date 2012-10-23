@@ -12,7 +12,7 @@ function gameLoop() {
 	}
 
 	if(playerObject.y > 0 && !jumping) {
-		playerObject.y-= 0.5;
+		playerObject.y-= 0.5/playerObject.y/2;
 	}
 
 	if(playerObject.y < 0 + playerObject.boundHeight/2) {
