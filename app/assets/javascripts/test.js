@@ -4,8 +4,6 @@ var obstacleModel;
 var obstacles =[];
 var jumping  = false;
 var score = 0;
-var dec;
-var inc;
 var difficulty = 0;
 
 var collision_detect = function(obj1, obj2) {
@@ -60,18 +58,23 @@ function gameLoop() {
       if (collision_detect(playerObject, obstacles[i]))
           $("#debug").html("HIT DETECTION.");
 
-  	if(collision_detect(playerObject, obstacles[i]) && 
-  	playerObject.x == obstacles[i].x){
+  	if(playerObject.x == obstacles[i].x && obstacles[i].z == playerObject.z && collision_detect(playerObject, obstacles[i])){
   		decrease_score();
   		console.log(score);
   	}
-  	else if (!collision_detect(playerObject, obstacles[i]) &&
-  	playerObject.x == obstacles[i].x){
+  	else if (playerObject.x == obstacles[i].x && playerObject.z == obstacles[i].z && !collision_detect(playerObject, obstacles[i])){
   		increase_score();
   		console.log(score);
   	}
+	else if (playerObject.x == obstacles[i].x && 
+	playerObject.z != obstacles[i].z){
+		increase_score();
+		console.log(score);
+	}
 
-    obstacles[i].x-= 0.7;
+
+    obstacles[i].x-= 1; //Changed to 1 to avoid floating point inaccuracies
+	//that make it difficult to detect collisions
   	if(obstacles[i].x <= -20)
   	{
       obstacles[i].z = Math.floor(Math.random()*3)*2-6;
