@@ -1,7 +1,11 @@
 var testScene;
 var playerObject;
 var obstacle;
-var jumping  = false;
+var jumping = false;
+var score = 0;
+var dec;
+var inc;
+
 var collision_detect = function(obj1, obj2) {
 	
     var hHit = false;
@@ -25,11 +29,30 @@ var collision_detect = function(obj1, obj2) {
 	return false;
 }
 
+var decrease_score = function(){
+	score-=1;
+}
+var increase_score = function(){
+	score+=1;
+}
+
 function gameLoop() {
 	//game logic here
+
 	$("#debug").html("No collision detection.");
     if (collision_detect(playerObject, obstacle))
         $("#debug").html("HIT DETECTION.");
+
+	if(collision_detect(playerObject, obstacle) && 
+	playerObject.x == obstacle.x){
+		decrease_score();
+		console.log(score);
+	}
+	else if (!collision_detect(playerObject, obstacle) &&
+	playerObject.x == obstacle.x){
+		increase_score();
+		console.log(score);
+	}
 
     obstacle.x-= 1;
 	if(obstacle.x == -20)
@@ -53,6 +76,7 @@ function gameLoop() {
 			jumping = false;
 		}
 	}
+
 }
 
 $(function() {
