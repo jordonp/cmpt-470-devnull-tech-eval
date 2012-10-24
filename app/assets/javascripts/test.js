@@ -130,8 +130,6 @@ $(function() {
     $("#status").removeClass("hidden").show();
   });
 
-  $("#status").removeClass("hidden").show();
-
   $(document).keydown(function(e){
       if (e.keyCode == 37) { //left
         if(playerObject.z > -6.0) {
@@ -236,6 +234,8 @@ $(function() {
   setScene(testScene);
 
   runningLoop = setInterval(gameLoop, 1000 / 60);
+
+  $("#status").removeClass("hidden").show();
 
   render();
 
