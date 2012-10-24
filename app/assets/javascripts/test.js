@@ -2,10 +2,59 @@ var testScene;
 var playerObject;
 var obstacle;
 var jumping  = false;
+var score = 0;
+var dec;
+var inc;
+
+var collision_detect = function(obj1, obj2) {
+	
+    var hHit = false;
+    var vHit = false;
+
+	distx1 = 2*(Math.abs(obj1.x) + obj1.boundWidth/2);
+	disty1 = 2*(Math.abs(obj1.y) + obj1.boundHeight/2);
+	distx2 = 2*(Math.abs(obj2.x) + obj2.boundWidth/2);
+	disty2 = 2*(Math.abs(obj2.y) + obj2.boundHeight/2);
+	
+	if (Math.abs(obj1.x) <= distx2 && Math.abs(obj2.x) <= distx1){
+		hHit = true;
+	}	
+	if (Math.abs(obj1.y) <= disty2 && Math.abs(obj2.y) <= disty1){
+		vHit = true;
+	}
+
+    if (hHit == true && vHit == true)
+        return true;
+    
+	return false;
+}
+
+var decrease_score = function(){
+	score-=1;
+}
+var increase_score = function(){
+	score+=1;
+}
 
 function gameLoop() {
 	//game logic here
-	obstacle.x-= 0.5;
+
+	$("#debug").html("No collision detection.");
+    if (collision_detect(playerObject, obstacle))
+        $("#debug").html("HIT DETECTION.");
+
+	if(collision_detect(playerObject, obstacle) && 
+	playerObject.x == obstacle.x){
+		decrease_score();
+		console.log(score);
+	}
+	else if (!collision_detect(playerObject, obstacle) &&
+	playerObject.x == obstacle.x){
+		increase_score();
+		console.log(score);
+	}
+
+    obstacle.x-= 1;
 	if(obstacle.x == -20)
 	{
 		obstacle.x = 300;
@@ -47,18 +96,12 @@ $(function() {
         if(playerObject.z > -6.0) {
           playerObject.z -= 2.0;
         }
-		 if (collision_detect(playerObject, testObject2)){
-			playerObject.z += 2.0;
-			}
          return false;
       }
       if (e.keyCode == 39) { //right
         if(playerObject.z < -2.0) {
           playerObject.z += 2.0;
         }
-		 if (collision_detect(playerObject, testObject2)){
-			playerObject.z -= 2.0;
-			}
          return false;
       }
       if (e.keyCode == 32) { //space
@@ -71,37 +114,6 @@ $(function() {
       }
   });
   
-  var collision_detect = function(obj1, obj2) {
-	
-	distx1 = Math.abs(obj1.x) + obj1.boundWidth/2;
-	disty1 = Math.abs(obj1.y) + obj1.boundHeight/2;
-	distx2 = Math.abs(obj2.x) + obj2.boundWidth/2;
-	disty2 = Math.abs(obj2.y) + obj2.boundHeight/2;
-
-	a = Math.abs(obj1.x) + Math.abs(obj2.x);
-	b = Math.abs(obj1.y) + Math.abs(obj2.y);
-	
-	hypo = Math.sqrt(a*a + b*b);
-	
-	if (hypo <= (distx1 + distx2)/2){
-		console.log(distx1, disty1, distx2, disty2);
-		console.log(distx1-distx2, disty1-disty2, hypo);
-		console.log("Horizontal collision.");
-		return true;
-	}	
-
-	if (hypo <= (disty1 + disty2)/2){
-		console.log(distx1, disty1, distx2, disty2);
-		console.log(distx1-distx2, disty1-disty2, hypo);
-		console.log("Vertical collision.");
-		return true;
-	}	
-
-	console.log(distx1, disty1, distx2, disty2);
-	console.log(distx1-distx2, disty1-disty2);
-	console.log("No collision.");
-	return false;
-}
   initRenderer();
 
   var run = new Animation();
