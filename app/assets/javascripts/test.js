@@ -81,7 +81,7 @@ function gameLoop() {
     {
         $("#canvas").hide();
         $("#game-over").removeClass("hidden");
-        $("#status").addClass("hidden");
+        $("#status").addClass("hidden").hide();;
         $(".score").html(score);
         stopRender();
         clearInterval(runningLoop);
@@ -127,10 +127,10 @@ $(function() {
     render();
     $("#canvas").show();
     $("#game-over").addClass("hidden");
-    $("#status").removeClass("hidden");
+    $("#status").removeClass("hidden").show();
   });
 
-  $("#status").removeClass("hidden");
+  $("#status").removeClass("hidden").show();
 
   $(document).keydown(function(e){
       if (e.keyCode == 37) { //left
