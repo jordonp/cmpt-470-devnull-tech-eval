@@ -4,6 +4,7 @@ var obstacleModel;
 var obstacles =[];
 var jumping  = false;
 var score = 0;
+var life = 3;
 var difficulty = 0;
 
 var collision_detect = function(obj1, obj2) {
@@ -29,8 +30,8 @@ var collision_detect = function(obj1, obj2) {
 	return false;
 }
 
-var decrease_score = function(){
-	score-=1;
+var decrease_life = function(){
+	life-=1;
 }
 var increase_score = function(){
 	score+=1;
@@ -38,6 +39,12 @@ var increase_score = function(){
 
 function gameLoop() {
 	//game logic here
+
+	if (life == 0){ 
+		alert("You're dead!");
+		console.log(score);
+	}
+
   difficulty++;
 
   if(difficulty % 500 == 0) {
@@ -53,14 +60,25 @@ function gameLoop() {
   }
 
   for(i in obstacles) {
-
+	if(playerObject.x == obstacles[i].x && obstacles[i].z == playerObject.z && collision_detect(playerObject, obstacles[i])){
+  		decrease_life();
+  	}
+	else{
+		increase_score();
+	}
+	/*
   	$("#debug").html("No collision detection.");
       if (collision_detect(playerObject, obstacles[i]))
           $("#debug").html("HIT DETECTION.");
-
+	
   	if(playerObject.x == obstacles[i].x && obstacles[i].z == playerObject.z && collision_detect(playerObject, obstacles[i])){
   		decrease_score();
   		console.log(score);
+  	}
+  	else if(playerObject.x == obstacles[i].x && obstacles[i].z == playerObject.z && jumping == true){
+  		console.log("Jump!");
+//increase_score();
+  		//console.log(score);
   	}
   	else if (playerObject.x == obstacles[i].x && playerObject.z == obstacles[i].z && !collision_detect(playerObject, obstacles[i])){
   		increase_score();
@@ -71,7 +89,7 @@ function gameLoop() {
 		increase_score();
 		console.log(score);
 	}
-
+	*/
 
     obstacles[i].x-= 1; //Changed to 1 to avoid floating point inaccuracies
 	//that make it difficult to detect collisions
@@ -214,6 +232,7 @@ $(function() {
   setScene(testScene);
 
   setInterval(gameLoop, 1000 / 60);
+
   render();
 
   return true;
