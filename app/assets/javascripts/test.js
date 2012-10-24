@@ -236,7 +236,6 @@ $(function() {
   runningLoop = setInterval(gameLoop, 1000 / 60);
 
   $("#status").removeClass("hidden").show();
-
   render();
 
   return true;
