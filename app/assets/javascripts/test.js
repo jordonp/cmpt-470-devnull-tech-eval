@@ -27,9 +27,9 @@ var collision_detect = function(obj1, obj2) {
 
 function gameLoop() {
 	//game logic here
-	$("#debug").html("No Hit! :[");
+	$("#debug").html("No collision detection.");
     if (collision_detect(playerObject, obstacle))
-        $("#debug").html("HIT");
+        $("#debug").html("HIT DETECTION.");
 
     obstacle.x-= 1;
 	if(obstacle.x == -20)
@@ -93,7 +93,7 @@ $(function() {
   testObject.boundHeight = 1.3;
   testObject.loadModelFromJson();
   testObject.setTexture("assets/char.jpg");
-  testObject.renderBounds = true;
+
   var testObject2 = new GameObject();
   testObject2.z = -4.0;
   testObject2.width = 2.0;
