@@ -12,12 +12,12 @@ var collision_detect = function(obj1, obj2) {
     var hHit = false;
     var vHit = false;
 
-	distx1 = (Math.abs(obj1.x) + obj1.boundWidth/2);
+	distx1 = (obj1.x + obj1.boundWidth/2);
 	disty1 = 2*(Math.abs(obj1.y) + obj1.boundHeight/2);
-	distx2 = (Math.abs(obj2.x) + obj2.boundWidth/2);
+	distx2 = (obj2.x + obj2.boundWidth/2);
 	disty2 = 2*(Math.abs(obj2.y) + obj2.boundHeight/2);
 	
-	if (Math.abs(obj1.x) <= distx2 && Math.abs(obj2.x) <= distx1){
+	if (obj1.x <= distx2 && obj2.x <= distx1){
 		hHit = true;
 	}	
 	if (Math.abs(obj1.y) <= disty2 && Math.abs(obj2.y) <= disty1){
@@ -45,6 +45,8 @@ function gameLoop() {
       obstacleModel = new GameObject();
       obstacleModel.z = Math.floor(Math.random()*3)*2-6;
       obstacleModel.x = 300.0;
+      obstacleModel.width = 2.0;
+      obstacleModel.boundWidth = 3.0;
       obstacleModel.color = [1.0, 1.0, 0.6];
       obstacleModel.setTexture("assets/crate.jpg");
       testScene.objects.push(obstacleModel);
