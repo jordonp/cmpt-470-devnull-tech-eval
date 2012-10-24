@@ -4,6 +4,7 @@ var obstacleModel;
 var obstacles =[];
 var jumping  = false;
 var score = 0;
+var life = 3;
 var difficulty = 0;
 
 var collision_detect = function(obj1, obj2) {
@@ -31,6 +32,12 @@ var collision_detect = function(obj1, obj2) {
 
 function gameLoop() {
 	//game logic here
+
+	if (life == 0){ 
+		alert("You're dead!");
+		console.log(score);
+	}
+
   difficulty++;
 
   if(difficulty % 500 == 0) {
@@ -46,7 +53,6 @@ function gameLoop() {
   }
 
   for(var i = 0; i < obstacles.length; i++) {
-    
   	if(obstacles[i].x <= -20)
   	{
       obstacles[i].z = Math.floor(Math.random()*3)*2-6;
@@ -198,6 +204,7 @@ $(function() {
   setScene(testScene);
 
   setInterval(gameLoop, 1000 / 60);
+
   render();
 
   return true;
