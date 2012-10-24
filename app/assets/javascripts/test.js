@@ -1,10 +1,12 @@
 var testScene;
 var playerObject;
-var obstacle;
+var obstacleModel;
+var obstacles =[];
 var jumping  = false;
 var score = 0;
 var dec;
 var inc;
+var difficulty = 0;
 
 var collision_detect = function(obj1, obj2) {
 	
@@ -38,27 +40,45 @@ var increase_score = function(){
 
 function gameLoop() {
 	//game logic here
+  difficulty++;
 
-	$("#debug").html("No collision detection.");
-    if (collision_detect(playerObject, obstacle))
-        $("#debug").html("HIT DETECTION.");
+  if(difficulty % 500 == 0) {
+    if(obstacles.length < 100) {
+      obstacleModel = new GameObject();
+      obstacleModel.z = Math.floor(Math.random()*3)*2-6;
+      obstacleModel.x = 300.0;
+      obstacleModel.color = [1.0, 1.0, 0.6];
+      obstacleModel.setTexture("assets/crate.jpg");
+      testScene.objects.push(obstacleModel);
+      obstacles.push(obstacleModel);
+    }
+  }
 
-	if(collision_detect(playerObject, obstacle) && 
-	playerObject.x == obstacle.x){
-		decrease_score();
-		console.log(score);
-	}
-	else if (!collision_detect(playerObject, obstacle) &&
-	playerObject.x == obstacle.x){
-		increase_score();
-		console.log(score);
-	}
+  for(i in obstacles) {
 
-    obstacle.x-= 1;
-	if(obstacle.x == -20)
-	{
-		obstacle.x = 300;
-	}
+  	$("#debug").html("No collision detection.");
+      if (collision_detect(playerObject, obstacles[i]))
+          $("#debug").html("HIT DETECTION.");
+
+  	if(collision_detect(playerObject, obstacles[i]) && 
+  	playerObject.x == obstacles[i].x){
+  		decrease_score();
+  		console.log(score);
+  	}
+  	else if (!collision_detect(playerObject, obstacles[i]) &&
+  	playerObject.x == obstacles[i].x){
+  		increase_score();
+  		console.log(score);
+  	}
+
+    obstacles[i].x-= 0.7;
+  	if(obstacles[i].x <= -20)
+  	{
+      obstacles[i].z = Math.floor(Math.random()*3)*2-6;
+  		obstacles[i].x = 300;
+  	}
+  }
+
 
 	if(playerObject.y > 0 && !jumping) {
 		playerObject.y-= 0.25/playerObject.y/5;
@@ -104,7 +124,7 @@ $(function() {
         }
          return false;
       }
-      if (e.keyCode == 32) { //space
+      if (e.keyCode == 32 || e.keyCode == 38) { //space or up
       	if(!jumping && playerObject.y == 0 + playerObject.boundHeight/2) {
           jumping = true;
           playerObject.currentAnimation = 1;
@@ -118,18 +138,18 @@ $(function() {
 
   var run = new Animation();
   for(var i = 1; i <= 13; i++ ) {
-    console.log("loading: " + (i/34*100).toString() + "%");
     run.addFrameFromJson("/run/charrun" + i.toString(), "assets/char.jpg");
   }
   run.speed = 0.5;
 
   var jump = new Animation();
   for(var i = 8; i <= 28; i++ ) {
-    console.log("loading: " + ((i+6)/34*100).toString() + "%");
     jump.addFrameFromJson("/jump/charjump" + i.toString(), "assets/char.jpg");
   }
   jump.speed = 0.35;
   jump.loop = false;
+
+  $('#loading').hide();
   
 
   var testObject = new GameObject();
@@ -142,12 +162,13 @@ $(function() {
   testObject.animations.push(run);
   testObject.animations.push(jump);
 
-  var testObject2 = new GameObject();
-  testObject2.z = -4.0;
-  testObject2.width = 2.0;
-  testObject2.boundWidth = 3.0;
-  testObject2.color = [1.0, 1.0, 0.6];
-  testObject2.setTexture("assets/crate.jpg");
+  obstacleModel = new GameObject();
+  obstacleModel.z = -4.0;
+  obstacleModel.x = 100.0;
+  obstacleModel.width = 2.0;
+  obstacleModel.boundWidth = 3.0;
+  obstacleModel.color = [1.0, 1.0, 0.6];
+  obstacleModel.setTexture("assets/crate.jpg");
 
   var testObject3 = new GameObject();
   testObject3.z = -4.0;
@@ -178,13 +199,14 @@ $(function() {
 
   testScene = new Scene();
   testScene.objects.push(testObject);
-  testScene.objects.push(testObject2);
   testScene.objects.push(testObject3);
   testScene.objects.push(testObject4);
   testScene.objects.push(testObject5);
   
   playerObject = testScene.objects[0];
-  obstacle = testScene.objects[1];
+
+  testScene.objects.push(obstacleModel);
+  obstacles.push(obstacleModel);
 
   setScene(testScene);
 
