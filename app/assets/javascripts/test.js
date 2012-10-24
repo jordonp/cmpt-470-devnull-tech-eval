@@ -1,18 +1,36 @@
 var testScene;
 var playerObject;
 var obstacle;
+var jumping  = false;
 
 function gameLoop() {
 	//game logic here
-	obstacle.x--;
+	obstacle.x-= 0.5;
 	if(obstacle.x == -20)
 	{
 		obstacle.x = 300;
 	}
+
+	if(playerObject.y > 0 && !jumping) {
+		playerObject.y-= 0.5/playerObject.y/2;
+	}
+
+	if(playerObject.y < 0 + playerObject.boundHeight/2) {
+		playerObject.y = 0 + playerObject.boundHeight/2;
+	}
+
+	if(jumping)
+	{
+		if(playerObject.y < 3.0) {
+			playerObject.y += 0.5/playerObject.y/3;
+		} else {
+			jumping = false;
+		}
+	}
 }
 
 $(function() {
-
+  
   $(document).keydown(function(e){
       if (e.keyCode == 37) { //left
          playerObject.x -= 0.1;
@@ -40,6 +58,12 @@ $(function() {
 		 if (collision_detect(playerObject, testObject2)){
 			playerObject.y += 0.1;
 			}
+         return false;
+      }
+      if (e.keyCode == 32) { //space
+      	if(!jumping && playerObject.y == 0 + playerObject.boundHeight/2) {
+          jumping = true;
+     	}
          return false;
       }
   });
@@ -80,7 +104,9 @@ $(function() {
   var testObject = new GameObject();
   testObject.z = -4.0;
   testObject.x = -2.5;
+  testObject.y = 2.0;
   testObject.rotateY = 90;
+  testObject.boundHeight = 1.3;
   testObject.loadModelFromJson();
   testObject.setTexture("assets/char.jpg");
 
@@ -95,22 +121,42 @@ $(function() {
   testObject3.z = -4.0;
   testObject3.y = -1.0;
   testObject3.width = 500.0;
-  testObject3.depth = 5.0;
+  testObject3.depth = 2.0;
   testObject3.boundWidth = 500.0;
-  testObject3.boundDepth = 5.0;
-  testObject3.color = [0.5, 0.5, 0.5];
+  testObject3.boundDepth = 2.0;
+  testObject3.color = [0.8, 0.5, 0.5];
+
+  var testObject4 = new GameObject();
+  testObject4.z = -6.0;
+  testObject4.y = -1.0;
+  testObject4.width = 500.0;
+  testObject4.depth = 2.0;
+  testObject4.boundWidth = 500.0;
+  testObject4.boundDepth = 2.0;
+  testObject4.color = [0.5, 0.8, 0.5];
+
+  var testObject5 = new GameObject();
+  testObject5.z = -2.0;
+  testObject5.y = -1.0;
+  testObject5.width = 500.0;
+  testObject5.depth = 2.0;
+  testObject5.boundWidth = 500.0;
+  testObject5.boundDepth = 2.0;
+  testObject5.color = [0.5, 0.5, 0.8];
 
   testScene = new Scene();
   testScene.objects.push(testObject);
   testScene.objects.push(testObject2);
   testScene.objects.push(testObject3);
+  testScene.objects.push(testObject4);
+  testScene.objects.push(testObject5);
   
   playerObject = testScene.objects[0];
   obstacle = testScene.objects[1];
 
   setScene(testScene);
 
-  setInterval(gameLoop, 1000 / 30);
+  setInterval(gameLoop, 1000 / 60);
   render();
 
   return true;
