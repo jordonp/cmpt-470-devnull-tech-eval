@@ -1,0 +1,1 @@
+for f in *.obj ; do ruby obj2json.rb "$f" ; done
