@@ -12,57 +12,60 @@ function gameLoop() {
 	}
 
 	if(playerObject.y > 0 && !jumping) {
-		playerObject.y-= 0.5/playerObject.y/2;
+		playerObject.y-= 0.25/playerObject.y/5;
 	}
 
 	if(playerObject.y < 0 + playerObject.boundHeight/2) {
 		playerObject.y = 0 + playerObject.boundHeight/2;
+    if(playerObject.currentAnimation == 1) {
+      playerObject.boundHeight *= 2;
+      playerObject.animations[1].currentFrame = 0;
+      playerObject.currentAnimation = 0;
+    }
 	}
 
 	if(jumping)
 	{
-		if(playerObject.y < 3.0) {
-			playerObject.y += 0.5/playerObject.y/3;
+		if(playerObject.y < 2.0) {
+			playerObject.y += 0.2/playerObject.y/2;
+      playerObject.x += 0.05;
 		} else {
 			jumping = false;
 		}
-	}
+	} else if ( playerObject.x > -5.0) {
+    playerObject.x -= 0.01;
+    if(playerObject.x < -5.0) {
+      playerObject.x = -5.0;
+    }
+  }
 }
 
 $(function() {
   
   $(document).keydown(function(e){
       if (e.keyCode == 37) { //left
-         playerObject.x -= 0.1;
+        if(playerObject.z > -6.0) {
+          playerObject.z -= 2.0;
+        }
 		 if (collision_detect(playerObject, testObject2)){
-			playerObject.x += 0.1;
-			}
-         return false;
-      }
-      if (e.keyCode == 38) { //up
-         playerObject.y += 0.1;
-		 if (collision_detect(playerObject, testObject2)){
-			playerObject.y -= 0.1;
+			playerObject.z += 2.0;
 			}
          return false;
       }
       if (e.keyCode == 39) { //right
-         playerObject.x += 0.1;
+        if(playerObject.z < -2.0) {
+          playerObject.z += 2.0;
+        }
 		 if (collision_detect(playerObject, testObject2)){
-			playerObject.x -= 0.1;
-			}
-         return false;
-      }
-      if (e.keyCode == 40) { //down
-         playerObject.y -= 0.1;
-		 if (collision_detect(playerObject, testObject2)){
-			playerObject.y += 0.1;
+			playerObject.z -= 2.0;
 			}
          return false;
       }
       if (e.keyCode == 32) { //space
       	if(!jumping && playerObject.y == 0 + playerObject.boundHeight/2) {
           jumping = true;
+          playerObject.currentAnimation = 1;
+          playerObject.boundHeight /= 2;
      	}
          return false;
       }
@@ -101,14 +104,31 @@ $(function() {
 }
   initRenderer();
 
+  var run = new Animation();
+  for(var i = 1; i <= 13; i++ ) {
+    console.log("loading: " + (i/34*100).toString() + "%");
+    run.addFrameFromJson("/run/charrun" + i.toString(), "assets/char.jpg");
+  }
+  run.speed = 0.5;
+
+  var jump = new Animation();
+  for(var i = 8; i <= 28; i++ ) {
+    console.log("loading: " + ((i+6)/34*100).toString() + "%");
+    jump.addFrameFromJson("/jump/charjump" + i.toString(), "assets/char.jpg");
+  }
+  jump.speed = 0.35;
+  jump.loop = false;
+  
+
   var testObject = new GameObject();
   testObject.z = -4.0;
-  testObject.x = -2.5;
+  testObject.x = -5;
   testObject.y = 2.0;
-  testObject.rotateY = 90;
+  testObject.rotateY = 100;
   testObject.boundHeight = 1.3;
-  testObject.loadModelFromJson();
-  testObject.setTexture("assets/char.jpg");
+  testObject.loadModelFromJson("/run/charrun1", "assets/char.jpg");
+  testObject.animations.push(run);
+  testObject.animations.push(jump);
 
   var testObject2 = new GameObject();
   testObject2.z = -4.0;

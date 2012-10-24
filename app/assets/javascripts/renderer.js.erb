@@ -10,11 +10,65 @@ Scene.prototype.draw = function() {
   };
 };
 
+function Animation () {
+  this.frames = [];
+  this.currentFrame = 0;
+  this.speed = 1;
+  this.loop = true;
+}
+
+Animation.prototype.getFrame = function() {
+  var currentModel = this.frames[Math.floor(this.currentFrame)];
+  this.currentFrame+= this.speed;
+  if(this.currentFrame >= this.frames.length) {
+    this.currentFrame = this.loop ? 0 : this.frames.length - 1;
+    currentModel = this.frames[this.currentFrame];
+  }
+  return currentModel;
+};
+
+Animation.prototype.addFrameFromJson = function (name, texture) {
+  var modelJson = ""; 
+  $.ajax({
+      url: 'model_handler/show.json',
+      data: { model:name },
+      type: 'GET',
+      success: function (data) {
+        modelJson = data;
+      },
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      async: false
+  }); 
+
+  var positions = new tdl.primitives.AttribBuffer(3, modelJson.position);
+  var normals = new tdl.primitives.AttribBuffer(3, modelJson.normal);
+  var texCoords = new tdl.primitives.AttribBuffer(2, modelJson.texCoord);
+  var indices = new tdl.primitives.AttribBuffer(3, modelJson.indices, 'Uint16Array');
+  var primitives = {
+    position: positions,
+    normal: normals,
+    texCoord: texCoords,
+    indices: indices};
+  var textures;
+
+  if (typeof texture == 'undefined' ) {
+    textures = { diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
+  } else {
+    textures = { diffuseSampler: tdl.textures.loadTexture(texture) };
+  }
+
+  var model = new tdl.models.Model(program, primitives, textures);
+  this.frames.push(model);
+}
+
 function GameObject () {
   var cube = tdl.primitives.createCube(1.0);
   var textures = {diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
   var model = new tdl.models.Model(program, cube, textures);
   this.model = model;
+  this.animations = [];
+  this.currentAnimation = 0;
   this.x = 0.0;
   this.y = 0.0;
   this.z = 0.0;
@@ -30,14 +84,13 @@ function GameObject () {
   this.transform = new Float32Array(16);
   this.color = [1.0, 1.0, 1.0];
   this.renderBounds = false;
-
 }
 
-GameObject.prototype.loadModelFromJson = function () {
+GameObject.prototype.loadModelFromJson = function (name, texture) {
   var modelJson = ""; 
   $.ajax({
       url: 'model_handler/show.json',
-      data: { model:'test' },
+      data: { model:name },
       type: 'GET',
       success: function (data) {
         modelJson = data;
@@ -55,10 +108,16 @@ GameObject.prototype.loadModelFromJson = function () {
     normal: normals,
     texCoord: texCoords,
     indices: indices};
-  var textures = {
-    diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
+  
+  var textures;
+
+  if (typeof texture == 'undefined' ) {
+    textures = { diffuseSampler: tdl.textures.loadTexture([255, 255, 255, 1.0])};
+  } else {
+    textures = { diffuseSampler: tdl.textures.loadTexture(texture) };
+  }
+
   var model = new tdl.models.Model(program, primitives, textures);
-  console.log(primitives);
   this.model = model;
   
 }
@@ -70,6 +129,9 @@ GameObject.prototype.setTexture = function(image_path) {
 };
   
 GameObject.prototype.draw = function() {
+  if(this.animations.length) {
+    this.model = this.animations[this.currentAnimation].getFrame();
+  }
   tdl.fast.identity4(this.transform);
   tdl.fast.matrix4.rotateX(this.transform, tdl.math.degToRad(this.rotateX));
   tdl.fast.matrix4.rotateY(this.transform, tdl.math.degToRad(this.rotateY));
