@@ -1,3 +1,16 @@
 // Place all the styles related to the tech_eval_demo controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+div#status {
+    position:absolute;
+    color:white;
+    padding-left:50px;
+    padding-top:30px;
+    font-size:30px;
+    display:none;
+}
+
+#canvas {
+	background-color: white;
+}
