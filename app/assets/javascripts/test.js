@@ -5,14 +5,14 @@ var obstacles =[];
 var jumping  = false;
 var score = 0;
 var life = 3;
-var difficulty = 0;
+var runningLoop;
 
 function reset() {
   score = 0;
   obstacles = [];
   jumping = false;
   score = 0;
-  difficulty = 0;
+  playerObject.z = -4.0;
   testScene.objects = [testScene.objects[0], testScene.objects[1], testScene.objects[2], testScene.objects[3]];
   obstacleModel = new GameObject();
   obstacleModel.z = Math.floor(Math.random()*3)*2-6;
@@ -49,14 +49,10 @@ var collision_detect = function(obj1, obj2) {
 function gameLoop() {
 	//game logic here
 
-	if (life == 0){ 
-		alert("You're dead!");
-		console.log(score);
-	}
+  score++;
+  $(".score").html(score);
 
-  difficulty++;
-
-  if(difficulty % 500 == 0) {
+  if(score % 500 == 0) {
     if(obstacles.length < 100) {
       obstacleModel = new GameObject();
       obstacleModel.z = Math.floor(Math.random()*3)*2-6;
@@ -78,14 +74,17 @@ function gameLoop() {
   	}
     if (!collision_detect(playerObject, obstacles[i]) || playerObject.z != obstacles[i].z)
     {
-  	    $("#status").html("Great, no collision detection. Keep going!");
         obstacles[i].x-= 1;
         continue;
     }
     else if (collision_detect(playerObject, obstacles[i]))
     {
-        $("#status").html("You've hit a box, game over!");
-        
+        $("#canvas").hide();
+        $("#game-over").removeClass("hidden");
+        $("#status").addClass("hidden");
+        $(".score").html(score);
+        stopRender();
+        clearInterval(runningLoop);
         break;   
     }
   }
@@ -121,8 +120,18 @@ function gameLoop() {
 }
 
 $(function() {
-  $("#game-over").hide();
-  
+
+  $("#play-again").click(function(ev) {
+    reset();
+    runningLoop = setInterval(gameLoop, 1000 / 60);
+    render();
+    $("#canvas").show();
+    $("#game-over").addClass("hidden");
+    $("#status").removeClass("hidden");
+  });
+
+  $("#status").removeClass("hidden");
+
   $(document).keydown(function(e){
       if (e.keyCode == 37) { //left
         if(playerObject.z > -6.0) {
@@ -206,8 +215,8 @@ $(function() {
   testObject5.color = [0.5, 0.5, 0.8];
 
   obstacleModel = new GameObject();
-  obstacleModel.z = -4.0;
-  obstacleModel.x = 100.0;
+  obstacleModel.z =  Math.floor(Math.random()*3)*2-6;
+  obstacleModel.x = 300.0;
   obstacleModel.width = 2.0;
   obstacleModel.boundWidth = 3.0;
   obstacleModel.color = [1.0, 1.0, 0.6];
@@ -226,7 +235,7 @@ $(function() {
 
   setScene(testScene);
 
-  setInterval(gameLoop, 1000 / 60);
+  runningLoop = setInterval(gameLoop, 1000 / 60);
 
   render();
 
