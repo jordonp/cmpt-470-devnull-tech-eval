@@ -11,9 +11,9 @@ var collision_detect = function(obj1, obj2) {
     var hHit = false;
     var vHit = false;
 
-	distx1 = 2*(Math.abs(obj1.x) + obj1.boundWidth/2);
+	distx1 = (Math.abs(obj1.x) + obj1.boundWidth/2);
 	disty1 = 2*(Math.abs(obj1.y) + obj1.boundHeight/2);
-	distx2 = 2*(Math.abs(obj2.x) + obj2.boundWidth/2);
+	distx2 = (Math.abs(obj2.x) + obj2.boundWidth/2);
 	disty2 = 2*(Math.abs(obj2.y) + obj2.boundHeight/2);
 	
 	if (Math.abs(obj1.x) <= distx2 && Math.abs(obj2.x) <= distx1){
@@ -27,13 +27,6 @@ var collision_detect = function(obj1, obj2) {
         return true;
     
 	return false;
-}
-
-var decrease_score = function(){
-	score-=1;
-}
-var increase_score = function(){
-	score+=1;
 }
 
 function gameLoop() {
@@ -52,34 +45,25 @@ function gameLoop() {
     }
   }
 
-  for(i in obstacles) {
-
-  	$("#debug").html("No collision detection.");
-      if (collision_detect(playerObject, obstacles[i]))
-          $("#debug").html("HIT DETECTION.");
-
-  	if(playerObject.x == obstacles[i].x && obstacles[i].z == playerObject.z && collision_detect(playerObject, obstacles[i])){
-  		decrease_score();
-  		console.log(score);
-  	}
-  	else if (playerObject.x == obstacles[i].x && playerObject.z == obstacles[i].z && !collision_detect(playerObject, obstacles[i])){
-  		increase_score();
-  		console.log(score);
-  	}
-	else if (playerObject.x == obstacles[i].x && 
-	playerObject.z != obstacles[i].z){
-		increase_score();
-		console.log(score);
-	}
-
-
-    obstacles[i].x-= 1; //Changed to 1 to avoid floating point inaccuracies
-	//that make it difficult to detect collisions
+  for(var i = 0; i < obstacles.length; i++) {
+    
   	if(obstacles[i].x <= -20)
   	{
       obstacles[i].z = Math.floor(Math.random()*3)*2-6;
-  		obstacles[i].x = 300;
+  	  obstacles[i].x = 300;
   	}
+    if (!collision_detect(playerObject, obstacles[i]) || playerObject.z != obstacles[i].z)
+    {
+  	    $("#status").html("Great, no collision detection. Keep going!");
+        obstacles[i].x-= 1;
+        continue;
+    }
+    else if (collision_detect(playerObject, obstacles[i]))
+    {
+        $("#status").html("You've hit a box, game over!");
+        
+        break;   
+    }
   }
 
 
