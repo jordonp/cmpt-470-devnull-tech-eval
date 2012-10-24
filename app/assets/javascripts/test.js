@@ -12,9 +12,9 @@ var collision_detect = function(obj1, obj2) {
     var hHit = false;
     var vHit = false;
 
-	distx1 = (obj1.x + obj1.boundWidth/2);
+	distx1 = (obj1.x + obj1.boundWidth);
 	disty1 = 2*(Math.abs(obj1.y) + obj1.boundHeight/2);
-	distx2 = (obj2.x + obj2.boundWidth/2);
+	distx2 = (obj2.x + obj2.boundWidth);
 	disty2 = 2*(Math.abs(obj2.y) + obj2.boundHeight/2);
 	
 	if (obj1.x <= distx2 && obj2.x <= distx1){
