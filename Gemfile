@@ -7,6 +7,13 @@ gem 'rails', '3.2.8'
 
 gem 'mysql2'
 
+group :development, :test do
+  gem 'rspec-rails', '2.11.0'
+end
+
+group :development do
+  gem 'annotate', '2.5.0'
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -23,9 +30,6 @@ end
 gem 'twitter-bootstrap-rails'
 
 gem 'jquery-rails'
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
 
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
