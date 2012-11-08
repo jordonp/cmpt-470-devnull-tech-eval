@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MeGL - &#47;dev&#47;null - <%= yield_for(:title, 'Group 1') %></title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+        <%= link_to "MeGL", :root, :class => "brand" %>
+        <div class="nav-collapse">
+            <ul class="nav">
+              <li><%= link_to "Home", :root %></li>
+              <li class="dropdown">
+                <%= link_to(:demo_index, :class => "dropdown-toggle", :data => {:toggle => "dropdown"}) do %>
+                Presentation<b class="caret"></b>
+                <% end %>
+                <ul class="dropdown-menu">
+                    <li><%= link_to "PowerPoint Slides (Google Docs)", "https://docs.google.com/presentation/d/1dq-CW9j0WLDtBhDeVR5BM_weSogiZA8N85iNaBUlJAU/edit" %></li>
+                    <li><%= link_to "WebGL #1 - Spinning Cube", demo_path(:id => "1") %></li>
+                    <li><%= link_to "WebGL #2 - Sphere", demo_path(:id => "2") %></li>
+                    <li><%= link_to "WebGL #3 - Image Effects", demo_path(:id => "3") %></li>
+                </ul>
+              </li>
+              <li><%= link_to "Technical Evaluation", :tech_eval_index %></li><!-- , :tech_eval_index -->
+              <li><%= link_to "About Us", :about_index %></li>
+            </ul>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+    <div class="span9">
+        <%= yield %>
+    </div>
+</div>
+</body>
+</html>
