@@ -3,6 +3,13 @@
 <div class="notice">
 <%= flash[:error] %>
 </div>
+<div>
+<p>
+Hi stranger!
+<br />
+We've noticed you are not logged in, please either log-in or create a user account below. Once logged into our system, all of our content will be available to you; full contents can be found in the navigation bar above, once logged in. <br />
+</p>
+</div>
 <div class="row">
   <div class="span6 offset3">
     <%= form_for(:session, url: sessions_path) do |f| %>

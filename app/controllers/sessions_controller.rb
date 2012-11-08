@@ -2,7 +2,6 @@ class SessionsController < ApplicationController
   layout "application_login"
 
   def new
-    raise NotImplementedError.new("You blew something up! This method isn't implemented.")
   end
 
   def create
