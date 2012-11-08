@@ -20,4 +20,22 @@ module SessionsHelper
   def current_user
     @current_user ||= User.find_by_remember_token(cookies[:remember_token])
   end
+
+  #signed_in? && current_user.enabled? && !current_user.client_connect_user?
+  def authorized?(action=nil, resource=nil, *args)
+    signed_in?
+  end
+
+  def sign_in_required
+    authorized? || access_rejected
+  end
+
+  def access_rejected
+    respond_to do |format|
+      format.html do
+        redirect_to new_session_path
+      end
+    end
+    return false
+  end
 end
